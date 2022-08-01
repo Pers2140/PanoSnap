@@ -10,3 +10,6 @@
 - learn how to setup Flask app and how it outputs HTML
 - learn how to store, update and retrieve data from redis DB
 - Connect to google street view and retrieve photo spheres based on location
+
+- Login and creation ability
+- Mysql database that stores users and their favorite google360 spheres

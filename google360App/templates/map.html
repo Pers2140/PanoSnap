@@ -1,0 +1,38 @@
+
+{% extends 'base.html' %}
+
+{% block head %} {% endblock %}
+
+{% block body %} 
+
+<!-- <iframe
+  width="50%"
+  height=""
+  style="border:0"
+  loading="lazy"
+  allowfullscreen
+  referrerpolicy="no-referrer-when-downgrade"
+  src="https://www.google.com/maps/embed/v1/search?key=AIzaSyDuor625kNugbhknAmc4RtKUd5Z-PBulFk
+  &q=record+stores+in+Seattle">
+</iframe>
+<iframe
+  width="50%"
+  height="500"
+  frameborder="0" style="border:0"
+  referrerpolicy="no-referrer-when-downgrade"
+  src="https://www.google.com/maps/embed/v1/streetview?key=AIzaSyDuor625kNugbhknAmc4RtKUd5Z-PBulFk
+  &location=46.414382,10.013988
+  &heading=210
+  &pitch=10
+  &fov=35"
+  allowfullscreen>
+</iframe> -->
+
+<div id="favButton">⭐</div>
+<div id="googleMap" style="width: 100%;height:400px;"></div>
+<div id="pano" style="width:100%;height:400px;"></div>
+<script src="{{ url_for('static', filename='scripts/gmap.js')}}"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDuor625kNugbhknAmc4RtKUd5Z-PBulFk&callback=myMap"></script>
+{% endblock %}
+
+

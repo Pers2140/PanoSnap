@@ -1,0 +1,22 @@
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  /* background:red; */
+}
+
+#googleMap,
+#pano {
+  height: 100%;
+  width: 100%;
+  background:black;
+}
+
+#favButton{
+  width:200px;
+  height:50px;
+  background:grey;
+  margin:10px;
+  color:white;
+}

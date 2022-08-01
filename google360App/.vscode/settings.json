@@ -1,0 +1,8 @@
+{
+    "cSpell.words": [
+        "DateTime",
+        "endhead",
+        "SQLALCHEMY"
+    ],
+    "python.formatting.provider": "black"
+}
