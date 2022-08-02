@@ -1,9 +1,10 @@
 function myMap() {
-    const fenway = { lat: 42.345573, lng: -71.098326 };
+    // 40.75820747253673, -73.9854016173013
+    const fenway = { lat: 40.75820747253673, lng: -73.9854016173013 };
 
     let mapProp= {
       center:fenway,
-      zoom:5,
+      zoom:10,
     };
     let map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
     const panorama = new google.maps.StreetViewPanorama(
@@ -21,8 +22,7 @@ function myMap() {
     
     let favButton = document.getElementById("favButton").addEventListener("click",()=>{
         console.log(panorama)
-        console.log(panorama.location)
-        console.log(panorama.location.description+' is now faved!')
+        // console.log(panorama.location)
         // send fav pano details
         let data = panorama.location
         
@@ -31,7 +31,7 @@ function myMap() {
           headers: {'Content-Type': 'application/json'}, 
           body: JSON.stringify(data)
         }).then(res => {
-          console.log("Request complete! response:", res);
+          console.log(`${data.description} is now faved!`);
         });
     })
       
