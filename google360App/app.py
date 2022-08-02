@@ -1,4 +1,4 @@
-from flask import Flask, render_template, flash
+from flask import Flask, render_template, flash, request
 from flask_wtf import FlaskForm
 from sqlalchemy import true
 from wtforms import StringField, SubmitField
@@ -53,7 +53,16 @@ def user(name,email):
 
 
 # endpoint to post users favorite Pano locations
-
+@app.route("/fav", methods=["GET","POST"])
+def fav():
+    
+    if request.method == 'POST':
+        print ("someone posted something")
+    
+    print (request.json)
+    
+    return render_template("index.html")
+    
 # create name page
 @app.route("/name", methods=["GET", "POST"])
 def name():
@@ -68,3 +77,6 @@ def name():
         form.email.data = ''
         flash('Form Submitted Successfully')
     return render_template("name.html", name=name, email=email, form=form)
+
+if __name__ == '__main__':
+   app.run(debug = True)

@@ -23,8 +23,17 @@ function myMap() {
         console.log(panorama)
         console.log(panorama.location)
         console.log(panorama.location.description+' is now faved!')
+        // send fav pano details
+        let data = panorama.location
+        
+        fetch("http://127.0.0.1:5000/fav", {
+          method: "POST",
+          headers: {'Content-Type': 'application/json'}, 
+          body: JSON.stringify(data)
+        }).then(res => {
+          console.log("Request complete! response:", res);
+        });
     })
       
     }
 
-// send fav pano details
