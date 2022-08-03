@@ -1,10 +1,7 @@
 from flask import Flask, render_template, flash, request
-from flask_wtf import FlaskForm
-from sqlalchemy import true
-from wtforms import StringField, SubmitField
-from wtforms.validators import DataRequired
-from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime
+
+from modules.Form import *
+from modules.sqlModel import *
 
 """
     To have live server update on change set FLASK vars
@@ -18,25 +15,6 @@ app = Flask(__name__)
 # add database
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 app.config["SECRET_KEY"] = "password"
-
-# create sql db instance
-db = SQLAlchemy(app)
-
-# create SQL Model
-class Users(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(200), nullable=False)
-    email = db.Column(db.String(120), nullable=False, unique=True)
-    data_added = db.Column(db.DateTime, default=datetime.utcnow)
-    
-    def __repr__(self):
-        return '<Name %r> % self.name'
-
-# create Form Class
-class NamerForm(FlaskForm):
-    name = StringField("Hey whats your name", validators=[DataRequired()])
-    email = StringField("Hey whats your email", validators=[DataRequired()])
-    submit = SubmitField("Submit")
 
 
 # create index route
@@ -55,12 +33,9 @@ def user(name,email):
 # endpoint to post users favorite Pano locations
 @app.route("/fav", methods=["GET","POST"])
 def fav():
-    
     if request.method == 'POST':
         print ("someone posted something")
-    
     print (request.json)
-    
     return render_template("index.html")
     
 # create name page
@@ -69,6 +44,7 @@ def name():
     name = None
     email = None
     form = NamerForm()
+    
     # Validate Form
     if form.validate_on_submit():
         name = form.name.data
