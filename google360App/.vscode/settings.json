@@ -4,5 +4,10 @@
         "endhead",
         "SQLALCHEMY"
     ],
-    "python.formatting.provider": "black"
+    "python.formatting.provider": "black",
+    "cSpell.ignoreWords": [
+        "favpano",
+        "latlng",
+        "pano"
+    ]
 }

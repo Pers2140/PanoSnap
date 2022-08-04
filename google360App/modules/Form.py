@@ -5,7 +5,9 @@ from flask_wtf import FlaskForm
 
 # Create Form Class
 class NamerForm(FlaskForm):
-    
+    '''
+        Gets user's form submission 
+    '''
     name = None
     email = None
     name = StringField("Hey whats your name", validators=[DataRequired()])

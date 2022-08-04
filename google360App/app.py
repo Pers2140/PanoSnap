@@ -1,7 +1,13 @@
 from flask import Flask, render_template, flash, request
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 from modules.Form import *
-from modules.sqlModel import *
+from modules.fav360 import *
+from modules.form_sql_model import *
+map_key= os.getenv("KEY")
 
 """
     To have live server update on change set FLASK vars
@@ -17,10 +23,13 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 app.config["SECRET_KEY"] = "password"
 
 
+flask = os.getenv("FLASK_APP")
 # create index route
 @app.route("/")
 def index():
-    return render_template("map.html")
+    print (map_key)
+    return render_template("map.html", map_key=map_key)
+
 
 
 # create user route
@@ -35,7 +44,10 @@ def user(name,email):
 def fav():
     if request.method == 'POST':
         print ("someone posted something")
-    print (request.json)
+        
+    user_fav = favpano(request.json)
+    print (user_fav.pano)
+    
     return render_template("index.html")
     
 # create name page
