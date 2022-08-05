@@ -13,3 +13,4 @@ class NamerForm(FlaskForm):
     name = StringField("Hey whats your name", validators=[DataRequired()])
     email = StringField("Hey whats your email", validators=[DataRequired()])
     submit = SubmitField("Submit")
+    

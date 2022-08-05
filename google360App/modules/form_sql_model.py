@@ -2,6 +2,8 @@
 from sqlalchemy import true
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+import sqlite3
+
 
 # create sql db instance
 db = SQLAlchemy()
@@ -15,6 +17,9 @@ class Users(db.Model):
     name = db.Column(db.String(200), nullable=False)
     email = db.Column(db.String(120), nullable=False, unique=True)
     data_added = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    # On user creation submit information to DB
+        
     
     def __repr__(self):
         return '<Name %r> % self.name'

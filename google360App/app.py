@@ -1,10 +1,11 @@
 from flask import Flask, render_template, flash, request
+import sqlite3
 from dotenv import load_dotenv
 import os
 
 load_dotenv()
 
-from modules.Form import *
+from modules.form import *
 from modules.fav360 import *
 from modules.form_sql_model import *
 map_key= os.getenv("KEY")
@@ -15,6 +16,35 @@ map_key= os.getenv("KEY")
     export FLASK_APP=app.py
     flask run
 """
+
+# Connect to database
+db_conn = sqlite3.connect('test.db') 
+
+# Cursor to interact with DB
+c = db_conn.cursor()
+
+# Create a Table
+# c.execute(""" 
+#           CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT, 
+          
+#           first_name TEXT,
+#           last_name TEXT,
+#           email TEXT,
+#           fav_pano TEXT
+          
+#           )
+          
+#           """)
+
+# c.execute("INSERT INTO users ('first_name','last_name','email','fav_pano') VALUES (?,?,?,?)", ("Darius", "Persaud", "example@gmail.com", "[{1},{2}]" ))
+
+c.execute("SELECT * FROM users")
+print(c.fetchall())
+# execute / commit command
+db_conn.commit()
+db_conn.close()
+
+
 
 # create instance
 app = Flask(__name__)
