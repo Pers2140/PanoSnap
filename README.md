@@ -8,6 +8,7 @@
 ## TODO list
 
 - Separate code into modules 
+- User dashboard with favorite panos
 - learn how to store, update and retrieve data from redis DB
 - Connect to google street view and retrieve photo spheres based on location
 - Add search box for addresses or locations, previous saved spots
