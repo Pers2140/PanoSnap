@@ -7,7 +7,7 @@ load_dotenv()
 
 from modules.form import *
 from modules.fav360 import *
-from modules.form_sql_model import *
+# from modules.form_sql_model import *
 map_key= os.getenv("KEY")
 
 """
@@ -25,20 +25,20 @@ c = db_conn.cursor()
 
 # Create a Table
 # c.execute(""" 
-#           CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT, 
+#           CREATE TABLE panos (id INTEGER PRIMARY KEY AUTOINCREMENT, 
           
-#           first_name TEXT,
-#           last_name TEXT,
-#           email TEXT,
-#           fav_pano TEXT
+#           description TEXT,
+#           latlng TEXT,
+#           pano TEXT,
+#           profile_url TEXT
           
 #           )
           
 #           """)
 
-# c.execute("INSERT INTO users ('first_name','last_name','email','fav_pano') VALUES (?,?,?,?)", ("Darius", "Persaud", "example@gmail.com", "[{1},{2}]" ))
+# c.execute("INSERT INTO users ('first_name','last_name','email','fav_pano') VALUES (?,?,?,?)", ('Zeus', 'god', 'Bigz@gmail.com', '[{1},{2}]' ))
 
-c.execute("SELECT * FROM users")
+c.execute("SELECT * FROM panos")
 print(c.fetchall())
 # execute / commit command
 db_conn.commit()
@@ -60,14 +60,11 @@ def index():
     print (map_key)
     return render_template("map.html", map_key=map_key)
 
-
-
 # create user route
 @app.route("/user/<name>")
 def user(name,email):
     # pass ^ name to user.html
     return render_template("user.html", name=name, email=email)
-
 
 # endpoint to post users favorite Pano locations
 @app.route("/fav", methods=["GET","POST"])
@@ -75,8 +72,9 @@ def fav():
     if request.method == 'POST':
         print ("someone posted something")
         
-    user_fav = favpano(request.json)
-    print (user_fav.pano)
+    user_fav = request.json
+    favpano(user_fav)
+    print (user_fav['pano'])
     
     return render_template("index.html")
     
