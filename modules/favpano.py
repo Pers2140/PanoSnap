@@ -7,6 +7,7 @@ class favpano:
     '''
     def __init__(self,obj):
         
+        self.username = obj['username']
         self.des = obj['description']
         self.latlng = str(obj['latLng'])
         self.pano = obj['pano']
@@ -14,13 +15,15 @@ class favpano:
         
         # Connect to database
         db_conn = sqlite3.connect('test.db') 
-
+        
         # Cursor to interact with DB
         c = db_conn.cursor()
+        
         # submit pano 
-        c.execute("INSERT INTO panos ('description','latlng','pano','profile_url') VALUES (?,?,?,?)", (self.des, self.latlng, self.pano, self.profile_url ))
+        c.execute("INSERT INTO panos ('username', 'description','latlng','pano','profile_url') VALUES (?,?,?,?,?)", (self.username, self.des, self.latlng, self.pano, self.profile_url ))
         print('New pano submitted to DB new ')
         
+        # close connection to DB
         db_conn.commit()
         db_conn.close()
         

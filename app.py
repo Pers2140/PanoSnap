@@ -6,8 +6,8 @@ import os
 load_dotenv()
 
 from modules.form import *
-from modules.fav360 import *
-# from modules.form_sql_model import *
+from modules.favpano import *
+from modules.User import *
 map_key= os.getenv("KEY")
 
 """
@@ -27,6 +27,7 @@ c = db_conn.cursor()
 # c.execute(""" 
 #           CREATE TABLE panos (id INTEGER PRIMARY KEY AUTOINCREMENT, 
           
+#           username TEXT,
 #           description TEXT,
 #           latlng TEXT,
 #           pano TEXT,
@@ -36,9 +37,10 @@ c = db_conn.cursor()
           
 #           """)
 
-# c.execute("INSERT INTO users ('first_name','last_name','email','fav_pano') VALUES (?,?,?,?)", ('Zeus', 'god', 'Bigz@gmail.com', '[{1},{2}]' ))
+# c.execute("INSERT INTO panos ('username','description','latlng','pano','profile_url') VALUES (?,?,?,?,?)", ('ZeusDaddy','test','test','password123','Bigz@gmail.com'))
+# c.execute("INSERT INTO users ('first_name','last_name','username','password','email') VALUES (?,?,?,?,?)", ('Zeus','god','BigDadaZ','password123','Bigz@gmail.com'))
 
-c.execute("SELECT * FROM panos")
+c.execute("SELECT * FROM users")
 print(c.fetchall())
 # execute / commit command
 db_conn.commit()
@@ -73,26 +75,31 @@ def fav():
         print ("someone posted something")
         
     user_fav = request.json
+    user_fav["username"] = "Darius"
     favpano(user_fav)
     print (user_fav['pano'])
     
     return render_template("index.html")
     
 # create name page
-@app.route("/name", methods=["GET", "POST"])
+@app.route("/login", methods=["GET", "POST"])
 def name():
-    name = None
+    username = None
+    password = None
     email = None
     form = NamerForm()
     
     # Validate Form
     if form.validate_on_submit():
-        name = form.name.data
+        username = form.username.data
+        password = form.password.data
         email = form.email.data
-        form.name.data = ''
+        User({"first_name":"none","last_name":"testing","username":username,"password":password,"email":email})
+        form.username.data = ''
         form.email.data = ''
+        form.password.data = ''
         flash('Form Submitted Successfully')
-    return render_template("name.html", name=name, email=email, form=form)
+    return render_template("login.html", username=username, password=password, email=email, form=form)
 
 if __name__ == '__main__':
    app.run(debug = True)

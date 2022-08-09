@@ -8,9 +8,9 @@ class NamerForm(FlaskForm):
     '''
         Gets user's form submission 
     '''
-    name = None
-    email = None
-    name = StringField("Hey whats your name", validators=[DataRequired()])
+   
+    username = StringField("Hey whats your username", validators=[DataRequired()])
+    password = StringField("Hey whats your password", validators=[DataRequired()])
     email = StringField("Hey whats your email", validators=[DataRequired()])
     submit = SubmitField("Submit")
     

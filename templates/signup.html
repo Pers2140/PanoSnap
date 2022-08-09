@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block head %} {% endblock %}
+
+{% block body %} 
+
+  {% for message in get_flashed_messages() %}
+    {{ message }}
+  {% endfor %}
+
+  {% if name %}
+    <h1>Hello {{ username }}</h1>
+    <h1>your email is {{ email }}</h1>
+
+  {% else %}
+    <h1>Sign Up</h1>
+  </br>
+  <form method="POST">
+    {{form.hidden_tag() }}
+
+    {{ form.username.label(class="form-label") }}
+    {{ form.username( class="form-control") }}
+
+    {{ form.password.label(class="form-label") }}
+    {{ form.password( class="form-control") }}
+
+    {{ form.email.label(class="form-label") }}
+    {{ form.email( class="form-control") }}
+    <br/>    
+    {{ form.submit( class="primary-button btn") }}
+  </form>
+  {% endif %}
+
+
+{% endblock %}
