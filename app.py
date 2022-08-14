@@ -1,16 +1,13 @@
-from flask import Flask, render_template, flash, request
+from flask import Flask, render_template, url_for, redirect, request
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
-from dotenv import load_dotenv
-
-import sqlite3
-import os
-
-load_dotenv()
+from flask_wtf import FlaskForm
+from wtforms import StringField, PasswordField, SubmitField
+from wtforms.validators import InputRequired, Length, ValidationError
+from flask_bcrypt import Bcrypt
 
 from modules.form import *
 from modules.favpano import *
 from modules.User import *
-map_key= os.getenv("KEY")
 
 """
     To have live server update on change set FLASK vars
@@ -19,56 +16,54 @@ map_key= os.getenv("KEY")
     flask run
 """
 
-# Connect to database
-db_conn = sqlite3.connect('test.db') 
-
-# Cursor to interact with DB
-c = db_conn.cursor()
-
-# Create a Table
-# c.execute(""" 
-#           CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT, 
-          
-#           username TEXT,
-#           password TEXT,
-#           Email TEXT
-         
-#           )
-          
-#           """)
-
-# c.execute("INSERT INTO panos ('username','description','latlng','pano','profile_url') VALUES (?,?,?,?,?)", ('ZeusDaddy','test','test','password123','Bigz@gmail.com'))
-# c.execute("INSERT INTO users ('username','password','email') VALUES (?,?,?)", ('BigDadaZ','password123','Bigz@gmail.com'))
-
-c.execute("SELECT * FROM users")
-print(c.fetchall())
-# execute / commit command
-
-db_conn.commit()
-db_conn.close()
-
-
-
 # create instance
 app = Flask(__name__)
 # add database
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config["SECRET_KEY"] = "password"
 # load flask_login
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
+# add bcrypt to app
+bcrypt = Bcrypt(app)
+# create sql db instance
+db = SQLAlchemy(app)
 
+# create SQL Model
+class User(db.Model, UserMixin):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(20), nullable=False, unique=True)
+    password = db.Column(db.String(80), nullable=False)
+    email = db.Column(db.String(80))
+    
+# create Signup Form
+class SignUpForm(FlaskForm):
+    username = StringField(validators=[InputRequired(), Length(min=4, max=20)], render_kw={"placeholder": "Username"})
+    password = PasswordField(validators=[InputRequired(), Length(min=8, max=20)], render_kw={"placeholder": "Password"})
+    email = StringField(validators=[InputRequired(), Length(min=8, max=20)], render_kw={"placeholder": "Email"})
+    submit = SubmitField('Register')
+    
+    def validate_username(self, username):
+        existing_user_username = User.query.filter_by(
+            username=username.data).first()
+        if existing_user_username:
+            raise ValidationError(
+                'That username already exists. Please choose a different one.')
+            
+class LoginForm(FlaskForm):
+    username = StringField(validators=[InputRequired(), Length(min=4, max=20)], render_kw={"placeholder": "Username"})
+    password = PasswordField(validators=[InputRequired(), Length(min=8, max=20)], render_kw={"placeholder": "Password"})
+    submit = SubmitField('Login')
+    
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-flask = os.getenv("FLASK_APP")
 # create index route
 @app.route("/")
 def index():
-    print (map_key)
-    return render_template("map.html", map_key=map_key)
+    return render_template("map.html")
 
 # create user route
 @app.route("/user/<name>")
@@ -93,39 +88,44 @@ def fav():
 # create signup page
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
-    username = None
-    password = None
-    email = None
-    form = NamerForm()
-    
-    # Validate Form
+    form = SignUpForm()
+
     if form.validate_on_submit():
-        username = form.username.data
-        password = form.password.data
-        email = form.email.data
-        User({"first_name":"none","last_name":"testing","username":username,"password":password,"email":email})
-        form.username.data = ''
-        form.password.data = ''
-        form.email.data = ''
-        flash('Form Submitted Successfully')
-    return render_template("signup.html", username=username, password=password, email=email, form=form)
+        hashed_password = bcrypt.generate_password_hash(form.password.data)
+        new_user = User(username=form.username.data, password=hashed_password,email=form.email.data)
+        db.session.add(new_user)
+        db.session.commit()
+        print ("New user %s added with pass %s" %(new_user.username,hashed_password))
+        return redirect(url_for('login'))
+    else:
+        print("Adding user failed")
+                        
+    return render_template('signup.html', form=form)
 
 # create login page
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    username = None
-    password = None
-    form = NamerForm()
-    
-    # Validate Form
+    form = LoginForm()
     if form.validate_on_submit():
-        username = form.username.data
-        password = form.password.data
-        
-        print("submit button pressed")
-        print ('%s has logged in Successfully' % (username))
-        
-    return render_template("login.html", username=username, password=password, form=form)
+        user = User.query.filter_by(username=form.username.data).first()
+        user.user_data = "panos and shit"
+        if user:
+            if bcrypt.check_password_hash(user.password, form.password.data):
+                login_user(user)
+                return redirect(url_for('dashboard'))
+    return render_template('login.html', form=form)
+
+@app.route("/logout", methods=["GET", "POST"])
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('login'))
+
+@app.route('/dashboard', methods=['GET', 'POST'])
+@login_required
+def dashboard():
+    print(user)
+    return render_template('user.html',username=current_user.username)
 
 if __name__ == '__main__':
    app.run(debug = True)
