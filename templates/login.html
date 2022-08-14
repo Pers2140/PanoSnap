@@ -10,7 +10,6 @@
 
   {% if username %}
     <h1>Hello {{ username }}</h1>
-    <h1>your email is {{ email }}</h1>
 
   {% else %}
     <h1>What's your username and email?</h1>
@@ -20,9 +19,6 @@
 
     {{ form.username.label(class="form-label") }}
     {{ form.username( class="form-control") }}
-
-    {{ form.email.label(class="form-label") }}
-    {{ form.email( class="form-control") }}
     
     {{ form.password.label(class="form-label") }}
     {{ form.password( class="form-control") }}

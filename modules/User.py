@@ -29,7 +29,7 @@ class User():
         c = db_conn.cursor()
         
         # submit pano 
-        c.execute("INSERT INTO users ('first_name','last_name','username','password','email') VALUES (?,?,?,?,?)", (self.first_name, self.last_name, self.username, self.username, self.email))
+        c.execute("INSERT INTO users ('username','password','email') VALUES (?,?,?)", ( self.username, self.username, self.email))
         print('New user submitted to DB new ')
         
         # close connection to DB
