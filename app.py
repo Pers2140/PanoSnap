@@ -64,7 +64,7 @@ def signup():
 
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data)
-        new_user = User(username=form.username.data, password=hashed_password,email=form.email.data)
+        new_user = User(username=form.username.data,panos="{'latLng': {'lat': 40.75822369999999, 'lng': -73.98540849999999}, 'shortDescription': 'Times Square','description': 'Times Square','pano': 'CAoSK0FGMVFpcFAxRUtQcG1mZWZGMU4xS1hGZ3RxeTRLbm9COTk1UVZoV0NocTg.', 'profileUrl': '//maps.google.com/maps/contrib/104359050004655709521'}", password=hashed_password,email=form.email.data)
         db.session.add(new_user)
         db.session.commit()
         print ("New user %s added with pass %s" %(new_user.username,hashed_password))
@@ -80,7 +80,7 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
-        user.user_data = "panos and shit"
+        current_user.user_data = "panos and shit"
         if user:
             if bcrypt.check_password_hash(user.password, form.password.data):
                 login_user(user)

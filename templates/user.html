@@ -5,6 +5,31 @@
 
 {% block body %} 
     <!-- Hello user name passed var -->
-    <h1>Hello user {{username | capitalize }}</h1>
+    <h1>Hi {{username | capitalize }} here are your favorite sites </h1>
+    <p>{{(current_user.panos| tojson)}}</p>
+    <div id="street-view"></div>
+    <script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDuor625kNugbhknAmc4RtKUd5Z-PBulFk&callback=initialize&v=weekly"
+    defer
+  ></script>
+    <script>
+        let panorama;
 
+        function initialize() {
+        panorama = new google.maps.StreetViewPanorama(
+            document.getElementById("street-view"),
+            {
+            position: {'lat': 40.75822369999999, 'lng': -73.98540849999999},
+            pov: { heading: 165, pitch: 0 },
+            zoom: 1,
+            linksControl: false,
+            panControl: false,
+            enableCloseButton: false,
+            }
+           
+        );
+        }
+
+        window.initialize = initialize;
+    </script>
 {% endblock %}
