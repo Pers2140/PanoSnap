@@ -1,35 +1,50 @@
-
 {% extends 'base.html' %}
 
 {% block head %} {% endblock %}
 
-{% block body %} 
-    <!-- Hello user name passed var -->
-    <h1>Hi {{username | capitalize }} here are your favorite sites </h1>
-    <p>{{(current_user.panos| tojson)}}</p>
-    <div id="street-view"></div>
-    <script
+{% block body %}
+<!-- Hello user name passed var -->
+<!-- Need to map each latLng to a google map function with its own iterated div streetview box -->
+<h1>Hi {{username | capitalize }} here are your favorite sites </h1>
+<!-- <p>{{(userdata | safe)}}</p> -->
+<div  class="container justify-content-md-center">
+    <div id="mapCon" class="row "></div>
+</div>
+
+<script
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDuor625kNugbhknAmc4RtKUd5Z-PBulFk&callback=initialize&v=weekly"
-    defer
-  ></script>
-    <script>
-        let panorama;
+    defer></script>
+<script>
 
-        function initialize() {
-        panorama = new google.maps.StreetViewPanorama(
-            document.getElementById("street-view"),
-            {
-            position: {'lat': 40.75822369999999, 'lng': -73.98540849999999},
-            pov: { heading: 165, pitch: 0 },
-            zoom: 1,
-            linksControl: false,
-            panControl: false,
-            enableCloseButton: false,
-            }
-           
-        );
-        }
+    let panorama;
+    let userdata_list = JSON.parse('{{ userdata | tojson | safe }}')
+    
+    userdata_list.forEach((item,index) => {
+        
+        let lat = userdata_list[index].latLng.lat
+        let lng = userdata_list[index].latLng.lng
+        let toInsert = `
+                    <div class="col-sm-12 col-md-4">
+                        <div class="card-body">
+                            <h5 class="card-title">${userdata_list[index].shortDescription}</h5>
+                        <iframe id="map" style="height:300px" src="https://www.google.com/maps/embed/v1/view?key=AIzaSyDuor625kNugbhknAmc4RtKUd5Z-PBulFk&center=${lat},${lng}&zoom=15&maptype=satellite"></iframe>
+                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                        <button type="button" class="btn btn-danger">Delete</button>
+                        </div>
+                    </div>
+                    `
+                 
+        document.getElementById("mapCon").innerHTML += toInsert
+        document.getElementById("map").click(()=>{
+            alert("Hey that tickles")
+        })
 
-        window.initialize = initialize;
-    </script>
+
+    });
+
+
+
+
+</script>
+
 {% endblock %}

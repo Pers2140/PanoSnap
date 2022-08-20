@@ -15,3 +15,4 @@ class User(db.Model, UserMixin):
     panos = db.Column(db.String(), nullable=False)
     password = db.Column(db.String(80), nullable=False)
     email = db.Column(db.String(80))
+   

@@ -13,12 +13,13 @@
           <li class="active"><a href="#">Home</a></li>
           <!-- <li><a href="{{ url_for('signup', name='signup')}}">Sign Up</a></li> -->
           <!-- <li><a href="{{ url_for('login', name='login')}}">Login</a></li> -->
-          <li><a href="{{ url_for('user', name='Admin')}}">Admin Portal</a></li>
+          <li><a href="{{ url_for('dashboard', name='dashboard')}}">Dashboard</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
           {% if current_user.is_authenticated %}
           <li><a href="{{ url_for('logout', name='logout')}}"><span class="glyphicon glyphicon-log-in"></span> Logout {{current_user.username}}</a></li>
           {% else %}
+          <!-- <li><a href="{{ url_for('user', name='Admin')}}">Admin Portal</a></li> -->
           <li><a href="{{ url_for('signup', name='signup')}}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
           <li><a href="{{ url_for('login', name='login')}}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
           {% endif %}

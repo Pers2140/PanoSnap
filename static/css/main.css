@@ -10,7 +10,7 @@ body {
 #pano {
   height: 100%;
   width: 100%;
-  background:black;
+  /* background:black; */
 }
 
 #favButton{
@@ -21,8 +21,11 @@ body {
   color:white;
 }
 
-#street-view {
-  height: 300px;
-  width:300px;
-  border:2px solid black;
+#mapCon {
+  min-height: 500px;
+  /* border:2px solid black; */
+}
+
+#map:hover{
+  transform: scale(1.25);
 }

@@ -1,6 +1,7 @@
 from flask import Flask, render_template, url_for, redirect, request
 from flask_login import login_user, LoginManager, login_required, logout_user, current_user
 from flask_bcrypt import Bcrypt
+import json
 
 from modules.form import *
 from modules.favpano import *
@@ -25,7 +26,7 @@ login_manager.login_view = 'login'
 # add bcrypt to app
 bcrypt = Bcrypt(app)
 # create sql db instance
-db = SQLAlchemy(app)           
+db.init_app(app)         
 
     
 @login_manager.user_loader
@@ -50,10 +51,12 @@ def fav():
         print ("someone posted something")
         
     user_fav = request.json
-    user_fav["username"] = "Darius"
-    favpano(user_fav)
-    print (user_fav['pano'])
+    # favpano(user_fav)
     
+    usertoupdate = User.query.filter_by(username=current_user.username).first()
+    usertoupdate.panos += ","+ str(user_fav)
+    print(usertoupdate.panos)
+    db.session.commit()
     return render_template("index.html")
 
 
@@ -64,7 +67,10 @@ def signup():
 
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data)
-        new_user = User(username=form.username.data,panos="{'latLng': {'lat': 40.75822369999999, 'lng': -73.98540849999999}, 'shortDescription': 'Times Square','description': 'Times Square','pano': 'CAoSK0FGMVFpcFAxRUtQcG1mZWZGMU4xS1hGZ3RxeTRLbm9COTk1UVZoV0NocTg.', 'profileUrl': '//maps.google.com/maps/contrib/104359050004655709521'}", password=hashed_password,email=form.email.data)
+        new_user = User(username=form.username.data,
+                        panos="{'latLng': {'lat': 40.75822369999999, 'lng': -73.98540849999999}, 'shortDescription': 'Times Square','description': 'Times Square','pano': 'CAoSK0FGMVFpcFAxRUtQcG1mZWZGMU4xS1hGZ3RxeTRLbm9COTk1UVZoV0NocTg.', 'profileUrl': '//maps.google.com/maps/contrib/104359050004655709521'}",
+                        password=hashed_password,
+                        email=form.email.data)
         db.session.add(new_user)
         db.session.commit()
         print ("New user %s added with pass %s" %(new_user.username,hashed_password))
@@ -96,8 +102,9 @@ def logout():
 @app.route('/dashboard', methods=['GET', 'POST'])
 @login_required
 def dashboard():
-    print(user)
-    return render_template('user.html',username=current_user.username)
+    print(eval(current_user.panos))
+    userdata = current_user.panos
+    return render_template('user.html',username=current_user.username, userdata=eval(userdata))
 
 if __name__ == '__main__':
    app.run(debug = True)
