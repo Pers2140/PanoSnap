@@ -3,33 +3,50 @@
 {% block head %} {% endblock %}
 
 {% block body %}
-<!-- Hello user name passed var -->
-<!-- Need to map each latLng to a google map function with its own iterated div streetview box -->
-<h1>Hi {{username | capitalize }} here are your favorite sites </h1>
-<!-- <p>{{(userdata | safe)}}</p> -->
+<p>{{(userdata | tojson | safe)}}</p>
 <div  class="container justify-content-md-center">
+    <div class="dual-view row">
+        <div id="googleMap" style="width: 100%;height:400px;"></div>
+        <div id="pano" style="width:100%;height:400px;"></div>
+        <div id="favButton"><h1 class="text-center m-3">⭐</h1></div>
+        <script src="{{ url_for('static', filename='scripts/gmap.js')}}"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDuor625kNugbhknAmc4RtKUd5Z-PBulFk&callback=myMap"></script>
+    </div>
+    <h1>Hi {{username | capitalize }} here are your Favorite Places!</h1>
     <div id="mapCon" class="row "></div>
 </div>
 
-<script
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDuor625kNugbhknAmc4RtKUd5Z-PBulFk&callback=initialize&v=weekly"
-    defer></script>
 <script>
 
-    let panorama;
-    let userdata_list = JSON.parse('{{ userdata | tojson | safe }}')
+    let panorama
+    let userdata_list = JSON.parse('{{ userdata | tojson  }}').splice(1)
+    console.log(userdata_list)
+    const delPano = (obj) => {
+        console.log(obj)
+        fetch("http://127.0.0.1:5000/rmfav", {
+            method: "POST",
+            headers: {'Content-Type': 'application/json'}, 
+            body: JSON.stringify(atob(obj))
+          }).then(res => {
+            console.log(`${obj} is now removed!`);
+          });
+      }
     
     userdata_list.forEach((item,index) => {
-        
+        console.log(index)
         let lat = userdata_list[index].latLng.lat
         let lng = userdata_list[index].latLng.lng
+        let toRm = JSON.stringify(index)
+        let googleEmbededURL = `https://www.google.com/maps/embed/v1/view?key=AIzaSyDuor625kNugbhknAmc4RtKUd5Z-PBulFk&center=${lat},${lng}&zoom=15&maptype=satellite`
         let toInsert = `
                     <div class="col-sm-12 col-md-4">
                         <div class="card-body">
                             <h5 class="card-title">${userdata_list[index].shortDescription}</h5>
-                        <iframe id="map" style="height:300px" src="https://www.google.com/maps/embed/v1/view?key=AIzaSyDuor625kNugbhknAmc4RtKUd5Z-PBulFk&center=${lat},${lng}&zoom=15&maptype=satellite"></iframe>
-                        <a href="#" class="btn btn-primary">Go somewhere</a>
-                        <button type="button" class="btn btn-danger">Delete</button>
+                           
+                            <iframe class="iframe-placeholder" id="map" style="height:300px" src=${googleEmbededURL} ></iframe>
+                        <a href="#" class="btn btn-primary">Select</a>
+                        <button onclick="delPano('${btoa(toRm)}')">Click me</button>
+                        <p id="demo"></p>
                         </div>
                     </div>
                     `
@@ -38,7 +55,7 @@
         document.getElementById("map").click(()=>{
             alert("Hey that tickles")
         })
-
+        
 
     });
 

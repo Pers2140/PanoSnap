@@ -1,12 +1,15 @@
 <nav class="navbar navbar-inverse">
     <div class="container-fluid">
+      <a class="navbar-brand" href="#">
+        <img class="m-3"src="https://cdn-icons-png.flaticon.com/512/616/616616.png" alt="..." height="36">
+      </a>
+      <p style="color:lightgreen">PanoSnap</p>
       <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="{{url_for('index')}}">CoolSite</a>
       </div>
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav">
@@ -20,6 +23,7 @@
           <li><a href="{{ url_for('logout', name='logout')}}"><span class="glyphicon glyphicon-log-in"></span> Logout {{current_user.username}}</a></li>
           {% else %}
           <!-- <li><a href="{{ url_for('user', name='Admin')}}">Admin Portal</a></li> -->
+          <li><a class="navbar-brand" href="{{url_for('index')}}">FavPano</a></li>
           <li><a href="{{ url_for('signup', name='signup')}}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
           <li><a href="{{ url_for('login', name='login')}}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
           {% endif %}

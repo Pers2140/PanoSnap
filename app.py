@@ -44,6 +44,7 @@ def user(name,email):
     # pass ^ name to user.html
     return render_template("user.html", name=name, email=email)
 
+
 # endpoint to post users favorite Pano locations
 @app.route("/fav", methods=["GET","POST"])
 def fav():
@@ -52,13 +53,33 @@ def fav():
         
     user_fav = request.json
     # favpano(user_fav)
-    
     usertoupdate = User.query.filter_by(username=current_user.username).first()
-    usertoupdate.panos += ","+ str(user_fav)
+    usertoupdate.panos += "|" + str(user_fav)
     print(usertoupdate.panos)
     db.session.commit()
     return render_template("index.html")
 
+# endpoint to delete favpano
+@app.route("/rmfav", methods=["GET", "POST"])
+def deletefav():
+    if request.method == 'POST':
+        print ("someone posted something to remove")
+    user_del = request.json
+    print (user_del)
+    print ('--------------------')
+    usertoupdate = User.query.filter_by(username=current_user.username).first()
+    panoslist = usertoupdate.panos.split("|")
+    print (usertoupdate.panos)
+    print ('--------------------')
+    
+    todelpano =   ('|%s|' %(panoslist[int(user_del)]))
+    print (todelpano)
+    print ('--------------------')
+    
+    usertoupdate.panos = str(usertoupdate.panos).replace(str(todelpano),"")
+    print (usertoupdate.panos)
+    # db.session.commit()
+    return render_template("index.html")
 
 # create signup page
 @app.route("/signup", methods=["GET", "POST"])
@@ -104,7 +125,8 @@ def logout():
 def dashboard():
     print(eval(current_user.panos))
     userdata = current_user.panos
-    return render_template('user.html',username=current_user.username, userdata=eval(userdata))
+    print (type(userdata))
+    return render_template('user.html',username=current_user.username, userdata=eval(userdata.replace("|",",")))
 
 if __name__ == '__main__':
    app.run(debug = True)

@@ -29,3 +29,9 @@ body {
 #map:hover{
   transform: scale(1.25);
 }
+
+.iframe-placeholder
+    {
+      
+       background: url('https://i.gifer.com/8RDk.gif') no-repeat center;
+    }

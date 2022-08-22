@@ -22,7 +22,7 @@ function myMap() {
     
     let favButton = document.getElementById("favButton").addEventListener("click",()=>{
         console.log(panorama)
-        // console.log(panorama.location)
+        console.log(panorama.location)
         // send fav pano details
         let data = panorama.location
         
