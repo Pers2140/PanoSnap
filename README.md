@@ -15,5 +15,7 @@
 - Connect to google street view and retrieve photo spheres based on location
 - Add search box for addresses or locations, previous saved spots
 - Mysql database that stores users and their favorite google360 spheres
-- Favorites displayed on a map on user's dashboard 
+- Favorites displayed on a map on user's dashboard as pins
 - reset favs to default
+- set default fav on daskboard
+- map how long it would take to get there

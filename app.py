@@ -55,6 +55,7 @@ def fav():
     # favpano(user_fav)
     usertoupdate = User.query.filter_by(username=current_user.username).first()
     usertoupdate.panos += "|" + str(user_fav)
+    # usertoupdate.panos = "{'latLng': {'lat': 40.75822369999999, 'lng': -73.98540849999999}, 'shortDescription': 'Times Square','description': 'Times Square','pano': 'CAoSK0FGMVFpcFAxRUtQcG1mZWZGMU4xS1hGZ3RxeTRLbm9COTk1UVZoV0NocTg.', 'profileUrl': '//maps.google.com/maps/contrib/104359050004655709521'}"
     print(usertoupdate.panos)
     db.session.commit()
     return render_template("index.html")
@@ -65,20 +66,22 @@ def deletefav():
     if request.method == 'POST':
         print ("someone posted something to remove")
     user_del = request.json
-    print (user_del)
+    print (int(user_del)+1)
     print ('--------------------')
     usertoupdate = User.query.filter_by(username=current_user.username).first()
-    panoslist = usertoupdate.panos.split("|")
     print (usertoupdate.panos)
+    panoslist = usertoupdate.panos.split("|")
     print ('--------------------')
-    
-    todelpano =   ('|%s|' %(panoslist[int(user_del)]))
+    print (panoslist)
+    todelpano =   "|%s|"%(panoslist[int(user_del)+1])
+    print ('--------------------')
     print (todelpano)
     print ('--------------------')
     
-    usertoupdate.panos = str(usertoupdate.panos).replace(str(todelpano),"")
-    print (usertoupdate.panos)
-    # db.session.commit()
+    updatedpanos = str(usertoupdate.panos).replace(str(todelpano),"|")
+    usertoupdate.panos = updatedpanos
+    print (updatedpanos)
+    db.session.commit() 
     return render_template("index.html")
 
 # create signup page
