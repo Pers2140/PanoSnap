@@ -19,3 +19,6 @@
 - reset favs to default
 - set default fav on daskboard
 - map how long it would take to get there
+
+- Move over to React frontend
+- VR view

@@ -32,6 +32,8 @@ function myMap() {
           body: JSON.stringify(data)
         }).then(res => {
           console.log(`${data.description} is now faved!`);
+          location.reload()
+
         });
     })
       

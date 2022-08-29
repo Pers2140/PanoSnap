@@ -3,7 +3,7 @@
 {% block head %} {% endblock %}
 
 {% block body %}
-<p>{{(userdata | tojson | safe)}}</p>
+<!-- <p>{{(userdata | tojson | safe)}}</p> -->
 <div  class="container justify-content-md-center">
     <div class="dual-view row">
         <div id="googleMap" style="width: 100%;height:400px;"></div>
@@ -17,7 +17,7 @@
 </div>
 
 <script>
-
+    
     let panorama
     let userdata_list = JSON.parse('{{ userdata | tojson  }}').splice(1)
     console.log(userdata_list)
@@ -29,6 +29,7 @@
             body: JSON.stringify(atob(obj))
           }).then(res => {
             console.log(`${obj} is now removed!`);
+            location.reload()
           });
       }
     
@@ -45,7 +46,8 @@
                            
                             <iframe class="iframe-placeholder" id="map" style="height:300px" src=${googleEmbededURL} ></iframe>
                         <a href="#" class="btn btn-primary">Select</a>
-                        <button class="btn btn-danger" onclick="delPano('${btoa(toRm)}')">Delete</button>
+                        <a href="#"class="btn btn-danger" onclick="delPano('${btoa(toRm)}')">Delete</a>
+                        <a href="#" class="btn btn-success">Set default ⭐</a>
                         <p id="demo"></p>
                         </div>
                     </div>

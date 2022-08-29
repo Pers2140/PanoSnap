@@ -55,7 +55,7 @@ def fav():
     # favpano(user_fav)
     usertoupdate = User.query.filter_by(username=current_user.username).first()
     usertoupdate.panos += "|" + str(user_fav)
-    # usertoupdate.panos = "{'latLng': {'lat': 40.75822369999999, 'lng': -73.98540849999999}, 'shortDescription': 'Times Square','description': 'Times Square','pano': 'CAoSK0FGMVFpcFAxRUtQcG1mZWZGMU4xS1hGZ3RxeTRLbm9COTk1UVZoV0NocTg.', 'profileUrl': '//maps.google.com/maps/contrib/104359050004655709521'}"
+    # usertoupdate.panos += "|"+"{'latLng': {'lat': 40.75822369999999, 'lng': -73.98540849999999}, 'shortDescription': 'Times Square','description': 'Times Square','pano': 'CAoSK0FGMVFpcFAxRUtQcG1mZWZGMU4xS1hGZ3RxeTRLbm9COTk1UVZoV0NocTg.', 'profileUrl': '//maps.google.com/maps/contrib/104359050004655709521'}"
     print(usertoupdate.panos)
     db.session.commit()
     return render_template("index.html")
@@ -65,23 +65,25 @@ def fav():
 def deletefav():
     if request.method == 'POST':
         print ("someone posted something to remove")
-    user_del = request.json
-    print (int(user_del)+1)
-    print ('--------------------')
-    usertoupdate = User.query.filter_by(username=current_user.username).first()
-    print (usertoupdate.panos)
-    panoslist = usertoupdate.panos.split("|")
-    print ('--------------------')
-    print (panoslist)
-    todelpano =   "|%s|"%(panoslist[int(user_del)+1])
-    print ('--------------------')
-    print (todelpano)
-    print ('--------------------')
+    user_ans = request.json
     
-    updatedpanos = str(usertoupdate.panos).replace(str(todelpano),"|")
+    print (int(user_ans)+1)
+    posToDel = int(user_ans)+1
+    
+    usertoupdate = User.query.filter_by(username=current_user.username).first()
+    panoslist = usertoupdate.panos.split("|")
+   
+    # check if last postion in array
+    if (int(posToDel)+1 == len(panoslist)):
+        todelpano = "|%s"%(panoslist[int(posToDel)])
+        updatedpanos = str(usertoupdate.panos).replace(str(todelpano),"")
+    else:
+        todelpano = "|%s|"%(panoslist[int(posToDel)])
+        updatedpanos = str(usertoupdate.panos).replace(str(todelpano),"|")
+    
     usertoupdate.panos = updatedpanos
     print (updatedpanos)
-    db.session.commit() 
+    db.session.commit()
     return render_template("index.html")
 
 # create signup page
@@ -128,7 +130,7 @@ def logout():
 def dashboard():
     print(eval(current_user.panos))
     userdata = current_user.panos
-    print (type(userdata))
+    # print (type(userdata))
     return render_template('user.html',username=current_user.username, userdata=eval(userdata.replace("|",",")))
 
 if __name__ == '__main__':
