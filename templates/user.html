@@ -5,10 +5,9 @@
 {% block body %}
 <!-- <p>{{(userdata | tojson | safe)}}</p> -->
 <div  class="container justify-content-md-center">
-    <div class="dual-view row">
         <div id="googleMap" style="width: 100%;height:400px;"></div>
-        <div id="pano" style="width:100%;height:400px;"></div>
-        <div id="favButton"><h1 class="text-center m-3">⭐</h1></div>
+        <div id="pano" style="width:100%;height:400px;"></div><br>
+        <div  id="favButton" class="btn"><h4 class="m-5">Save This Location</h4></div>
         <script src="{{ url_for('static', filename='scripts/gmap.js')}}"></script>
         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDuor625kNugbhknAmc4RtKUd5Z-PBulFk&callback=myMap"></script>
     </div>
