@@ -1,11 +1,12 @@
 
-# Google API App
+# PanoSnap 📸
 
-## Shows selectable 360 views of close by photo spheres
+# [Live App](https://panosnap.herokuapp.com/) 🌎
 
+## Signup and create PanoSnap profile and add your favorite panoramas from Google Maps
 ![](layout.svg)
 
-## TODO list
+## Working on 
 
 - Let users add note to favorite panos - why would they like to do there or if the were there before
 - Allow users to add profile picture
