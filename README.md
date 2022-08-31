@@ -3,6 +3,11 @@
 
 # [Live App](https://panosnap.herokuapp.com/) 🌎
 
+Default Creds 
+
+Username:PanoSnap \
+Password:PanoSnap01
+
 ## Signup and create PanoSnap profile and add your favorite panoramas from Google Maps
 ![](layout.svg)
 
