@@ -1,5 +1,6 @@
 from flask import Flask, render_template, url_for, redirect, request
 from flask_login import login_user, LoginManager, login_required, logout_user, current_user
+from flask_cors import CORS, cross_origin   
 from flask_bcrypt import Bcrypt
 import json
 
@@ -16,6 +17,8 @@ from modules.User import *
 
 # create instance
 app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 # add database
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config["SECRET_KEY"] = "password"
@@ -35,6 +38,7 @@ def load_user(user_id):
 
 # create index route
 @app.route("/")
+@cross_origin()
 def index():
     return render_template("map.html")
 
