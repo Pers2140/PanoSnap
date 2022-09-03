@@ -5,6 +5,9 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import InputRequired, Length, ValidationError
 from flask_bcrypt import Bcrypt
+from sqlalchemy import true
+from flask_sqlalchemy import SQLAlchemy
+from flask_login import UserMixin
 
 # from modules.form import *
 # from modules.favpano import *
@@ -30,6 +33,10 @@ login_manager.login_view = 'login'
 bcrypt = Bcrypt(app)
 # create sql db instance
 db = SQLAlchemy(app)
+db.init_app(app)
+
+with app.app_context():
+    db.create_all()
 
 # create SQL Model
 class User(db.Model, UserMixin):
