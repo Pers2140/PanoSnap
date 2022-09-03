@@ -20,8 +20,8 @@ app = Flask(__name__)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 # add database
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
-app.config["SECRET_KEY"] = "password"
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://nczkgddnkjvutl:f40edd2c47cbc0ac444e4161c157b6f5fcdc56176a510f45d2bbae798f0bb16e@ec2-34-234-240-121.compute-1.amazonaws.com:5432/d7kp6qcmapcc7u'
+app.config["SECRET_KEY"] = "f40edd2c47cbc0ac444e4161c157b6f5fcdc56176a510f45d2bbae798f0bb16e"
 # load flask_login
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -29,9 +29,21 @@ login_manager.login_view = 'login'
 # add bcrypt to app
 bcrypt = Bcrypt(app)
 # create sql db instance
-db.init_app(app)         
+# db.init_app(app)         
 
-    
+db = SQLAlchemy()
+
+
+# create sql db instance
+# db = SQLAlchemy()
+
+# create SQL Model
+class User(db.Model, UserMixin):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(20), nullable=False, unique=True)
+    panos = db.Column(db.String(), nullable=False)
+    password = db.Column(db.String(80), nullable=False)
+    email = db.Column(db.String(80))
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
