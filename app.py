@@ -23,7 +23,7 @@ from flask_login import UserMixin
 # create instance
 app = Flask(__name__)
 # add database
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://nczkgddnkjvutl:f40edd2c47cbc0ac444e4161c157b6f5fcdc56176a510f45d2bbae798f0bb16e@ec2-34-234-240-121.compute-1.amazonaws.com:5432/d7kp6qcmapcc7u'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://nczkgddnkjvutl:f40edd2c47cbc0ac444e4161c157b6f5fcdc56176a510f45d2bbae798f0bb16e@ec2-34-234-240-121.compute-1.amazonaws.com:5432/d7kp6qcmapcc7u'
 app.config["SECRET_KEY"] = "f40edd2c47cbc0ac444e4161c157b6f5fcdc56176a510f45d2bbae798f0bb16e"
 # load flask_login
 login_manager = LoginManager()
