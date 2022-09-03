@@ -2,11 +2,14 @@ from flask import Flask, render_template, url_for, redirect, request
 from flask_login import login_user, LoginManager, login_required, logout_user, current_user
 from flask_cors import CORS, cross_origin   
 from flask_bcrypt import Bcrypt
+from sqlalchemy import true
+from flask_sqlalchemy import SQLAlchemy
+from flask_login import UserMixin
 import json
 
 from modules.form import *
-from modules.favpano import *
-from modules.User import *
+# from modules.favpano import *
+# from modules.User import *
 
 """
     To have live server update on change set FLASK vars
@@ -14,7 +17,19 @@ from modules.User import *
     export FLASK_APP=app.py
     flask run
 """
+db = SQLAlchemy()
 
+
+# create sql db instance
+# db = SQLAlchemy()
+
+# create SQL Model
+class User(db.Model, UserMixin):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(20), nullable=False, unique=True)
+    panos = db.Column(db.String(), nullable=False)
+    password = db.Column(db.String(80), nullable=False)
+    email = db.Column(db.String(80))
 # create instance
 app = Flask(__name__)
 cors = CORS(app)
