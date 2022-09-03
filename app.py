@@ -70,7 +70,6 @@ def load_user(user_id):
 
 # create index route
 @app.route("/")
-@cross_origin()
 def index():
     return render_template("map.html")
 
