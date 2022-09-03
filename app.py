@@ -1,17 +1,12 @@
-
 from flask import Flask, render_template, url_for, redirect, request
-from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
-from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField
-from wtforms.validators import InputRequired, Length, ValidationError
+from flask_login import login_user, LoginManager, login_required, logout_user, current_user
+from flask_cors import CORS, cross_origin   
 from flask_bcrypt import Bcrypt
-from sqlalchemy import true
-from flask_sqlalchemy import SQLAlchemy
-from flask_login import UserMixin
+import json
 
-# from modules.form import *
-# from modules.favpano import *
-# from modules.User import *
+from modules.form import *
+from modules.favpano import *
+from modules.User import *
 
 """
     To have live server update on change set FLASK vars
@@ -22,6 +17,8 @@ from flask_login import UserMixin
 
 # create instance
 app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 # add database
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://gbkwzleyaglirn:078915c822e17cbb4c2cb86fe7d8ff000b9f15cc5d3a7fbe2049bbb7810b057b@ec2-34-234-240-121.compute-1.amazonaws.com:5432/d38mm771ie34mq'
 app.config["SECRET_KEY"] = "078915c822e17cbb4c2cb86fe7d8ff000b9f15cc5d3a7fbe2049bbb7810b057b"
@@ -32,37 +29,8 @@ login_manager.login_view = 'login'
 # add bcrypt to app
 bcrypt = Bcrypt(app)
 # create sql db instance
-db = SQLAlchemy(app)
-db.init_app(app)
+db.init_app(app)         
 
-with app.app_context():
-    db.create_all()
-
-# create SQL Model
-class User(db.Model, UserMixin):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(20), nullable=False, unique=True)
-    password = db.Column(db.String(80), nullable=False)
-    email = db.Column(db.String(80))
-    
-# create Signup Form
-class SignUpForm(FlaskForm):
-    username = StringField(validators=[InputRequired(), Length(min=4, max=20)], render_kw={"placeholder": "Username"})
-    password = PasswordField(validators=[InputRequired(), Length(min=8, max=20)], render_kw={"placeholder": "Password"})
-    email = StringField(validators=[InputRequired(), Length(min=8, max=20)], render_kw={"placeholder": "Email"})
-    submit = SubmitField('Register')
-    
-    def validate_username(self, username):
-        existing_user_username = User.query.filter_by(
-            username=username.data).first()
-        if existing_user_username:
-            raise ValidationError(
-                'That username already exists. Please choose a different one.')
-            
-class LoginForm(FlaskForm):
-    username = StringField(validators=[InputRequired(), Length(min=4, max=20)], render_kw={"placeholder": "Username"})
-    password = PasswordField(validators=[InputRequired(), Length(min=8, max=20)], render_kw={"placeholder": "Password"})
-    submit = SubmitField('Login')
     
 @login_manager.user_loader
 def load_user(user_id):
@@ -70,6 +38,7 @@ def load_user(user_id):
 
 # create index route
 @app.route("/")
+@cross_origin()
 def index():
     return render_template("map.html")
 
