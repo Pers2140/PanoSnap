@@ -32,6 +32,10 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(80))
 # create instance
 app = Flask(__name__)
+# create sql db instance
+db.init_app(app)         
+with app.app_context():
+    db.create_all()
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 # add database
@@ -43,10 +47,7 @@ login_manager.init_app(app)
 login_manager.login_view = 'login'
 # add bcrypt to app
 bcrypt = Bcrypt(app)
-# create sql db instance
-db.init_app(app)         
-with app.app_context():
-    db.create_all()
+
 
     
 @login_manager.user_loader
