@@ -26,7 +26,7 @@ function myMap() {
         // send fav pano details
         let data = panorama.location
         
-        fetch("https://127.0.0.1:5000/fav", {
+        fetch("http://127.0.0.1:5000/fav", {
           method: "POST",
           headers: {'Content-Type': 'application/json'}, 
           body: JSON.stringify(data)
