@@ -19,7 +19,8 @@ from modules.User import *
 
 # create instance
 app = Flask(__name__)
-cors = CORS(app)
+cors = CORS(app, support_credentials=True)
+
 app.config['CORS_HEADERS'] = 'Content-Type'
 # add database
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://wjblbnnjbbmxwk:c384d9cbef5c91e14575e210fca6562c0bdbc7129e41bef36f715ccac71e8577@ec2-44-198-82-71.compute-1.amazonaws.com:5432/d1aan44lnboq1v'
