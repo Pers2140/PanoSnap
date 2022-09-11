@@ -61,7 +61,7 @@ class LoginForm(FlaskForm):
     password = PasswordField(validators=[InputRequired(), Length(min=8, max=20)], render_kw={"placeholder": "Password"})
     submit = SubmitField('Login')
 
-@cross_origin()
+@cross_origin(origin='*',headers=['Content-Type','Authorization'])
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
