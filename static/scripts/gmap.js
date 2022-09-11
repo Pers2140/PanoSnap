@@ -26,7 +26,7 @@ function myMap() {
         // send fav pano details
         let data = panorama.location
         
-        fetch("http://panosnap.herokuapp.com/fav", {
+        fetch("https://panosnap.herokuapp.com/fav", {
           method: "POST",
           headers: {'Content-Type': 'application/json'}, 
           body: JSON.stringify(data)

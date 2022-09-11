@@ -22,7 +22,7 @@
     console.log(userdata_list)
     const delPano = (obj) => {
         console.log(obj)
-        fetch("http://panosnap.herokuapp.com/rmfav", {
+        fetch("https://panosnap.herokuapp.com/rmfav", {
             method: "POST",
             headers: {'Content-Type': 'application/json'}, 
             body: JSON.stringify(atob(obj))
