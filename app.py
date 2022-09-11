@@ -87,8 +87,8 @@ def fav():
     user_fav = request.json
     # favpano(user_fav)
     usertoupdate = User.query.filter_by(username=current_user.username).first()
-    usertoupdate.panos += "|" + str(user_fav)
-    # usertoupdate.panos += "|"+"{'latLng': {'lat': 40.75822369999999, 'lng': -73.98540849999999}, 'shortDescription': 'Times Square','description': 'Times Square','pano': 'CAoSK0FGMVFpcFAxRUtQcG1mZWZGMU4xS1hGZ3RxeTRLbm9COTk1UVZoV0NocTg.', 'profileUrl': '//maps.google.com/maps/contrib/104359050004655709521'}"
+    # usertoupdate.panos += "|" + str(user_fav)
+    usertoupdate.panos += "|"+"{'latLng': {'lat': 40.75822369999999, 'lng': -73.98540849999999}, 'shortDescription': 'Times Square','description': 'Times Square','pano': 'CAoSK0FGMVFpcFAxRUtQcG1mZWZGMU4xS1hGZ3RxeTRLbm9COTk1UVZoV0NocTg.', 'profileUrl': '//maps.google.com/maps/contrib/104359050004655709521'}"
     print(usertoupdate.panos)
     db.session.commit()
     return render_template("index.html")
