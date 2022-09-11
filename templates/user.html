@@ -22,7 +22,7 @@
     console.log(userdata_list)
     const delPano = (obj) => {
         console.log(obj)
-        fetch("http://127.0.0.1:5000/rmfav", {
+        fetch("https://127.0.0.1:5000/rmfav", {
             method: "POST",
             headers: {'Content-Type': 'application/json'}, 
             body: JSON.stringify(atob(obj))
