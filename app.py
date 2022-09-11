@@ -19,25 +19,25 @@ from modules.User import *
 # create instance
 app = Flask(__name__)
 # add database
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://njemikeibgsxva:e5fb339719f4e471f54b4f6d1e444df7e482e792e18b2b9729e1dc4ae9ace8a1@ec2-54-204-241-136.compute-1.amazonaws.com:5432/d1nd2o2n87lgpd'
-app.config["SECRET_KEY"] = "e5fb339719f4e471f54b4f6d1e444df7e482e792e18b2b9729e1dc4ae9ace8a1"
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://wjblbnnjbbmxwk:c384d9cbef5c91e14575e210fca6562c0bdbc7129e41bef36f715ccac71e8577@ec2-44-198-82-71.compute-1.amazonaws.com:5432/d1aan44lnboq1v'
+app.config["SECRET_KEY"] = "c384d9cbef5c91e14575e210fca6562c0bdbc7129e41bef36f715ccac71e8577"
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///newusers.db'
 # load flask_login
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 # add bcrypt to app
-bcrypt = Bcrypt(app)
+# bcrypt = Bcrypt(app)
 # create sql db instance
 db = SQLAlchemy(app)
 
 # create SQL Model
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(20), nullable=False, unique=True)
+    username = db.Column(db.String(120), nullable=False, unique=True)
     panos = db.Column(db.String(), nullable=False)
-    password = db.Column(db.String(80), nullable=False)
-    email = db.Column(db.String(80))
+    password = db.Column(db.String(180), nullable=False)
+    email = db.Column(db.String(180))
     
 # create Signup Form
 class SignUpForm(FlaskForm):
@@ -121,7 +121,7 @@ def signup():
     form = SignUpForm()
 
     if form.validate_on_submit():
-        hashed_password = bcrypt.generate_password_hash(form.password.data)
+        hashed_password = form.password.data
         new_user = User(username=form.username.data,
                         panos="{'latLng': {'lat': 40.75822369999999, 'lng': -73.98540849999999}, 'shortDescription': 'Times Square','description': 'Times Square','pano': 'CAoSK0FGMVFpcFAxRUtQcG1mZWZGMU4xS1hGZ3RxeTRLbm9COTk1UVZoV0NocTg.', 'profileUrl': '//maps.google.com/maps/contrib/104359050004655709521'}",
                         password=hashed_password,
@@ -143,9 +143,9 @@ def login():
         user = User.query.filter_by(username=form.username.data).first()
         current_user.user_data = "panos and shit"
         if user:
-            if bcrypt.check_password_hash(user.password, form.password.data):
-                login_user(user)
-                return redirect(url_for('dashboard'))
+            
+            login_user(user)
+            return redirect(url_for('dashboard'))
     return render_template('login.html', form=form)
 
 @app.route("/logout", methods=["GET", "POST"])
