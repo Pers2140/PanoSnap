@@ -1,6 +1,7 @@
 from flask import Flask, render_template, url_for, redirect, request
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
 from flask_wtf import FlaskForm
+from flask_cors import CORS, cross_origin  
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import InputRequired, Length, ValidationError
 from flask_bcrypt import Bcrypt
@@ -18,6 +19,8 @@ from modules.User import *
 
 # create instance
 app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 # add database
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://wjblbnnjbbmxwk:c384d9cbef5c91e14575e210fca6562c0bdbc7129e41bef36f715ccac71e8577@ec2-44-198-82-71.compute-1.amazonaws.com:5432/d1aan44lnboq1v'
 app.config["SECRET_KEY"] = "c384d9cbef5c91e14575e210fca6562c0bdbc7129e41bef36f715ccac71e8577"
@@ -57,7 +60,8 @@ class LoginForm(FlaskForm):
     username = StringField(validators=[InputRequired(), Length(min=4, max=20)], render_kw={"placeholder": "Username"})
     password = PasswordField(validators=[InputRequired(), Length(min=8, max=20)], render_kw={"placeholder": "Password"})
     submit = SubmitField('Login')
-    
+
+@cross_origin()
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
