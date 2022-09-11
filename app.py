@@ -19,7 +19,7 @@ from modules.User import *
 # create instance
 app = Flask(__name__)
 # add database
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://njemikeibgsxva:e5fb339719f4e471f54b4f6d1e444df7e482e792e18b2b9729e1dc4ae9ace8a1@ec2-54-204-241-136.compute-1.amazonaws.com:5432/d1nd2o2n87lgpd'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://njemikeibgsxva:e5fb339719f4e471f54b4f6d1e444df7e482e792e18b2b9729e1dc4ae9ace8a1@ec2-54-204-241-136.compute-1.amazonaws.com:5432/d1nd2o2n87lgpd'
 app.config["SECRET_KEY"] = "e5fb339719f4e471f54b4f6d1e444df7e482e792e18b2b9729e1dc4ae9ace8a1"
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///newusers.db'
 # load flask_login
